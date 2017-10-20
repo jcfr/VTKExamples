@@ -53,8 +53,8 @@ else()
 endif ()
 
 #-----------------------------------------------------------------------------
-include(PlatformSpecificChecks)
 include(WikiOutputDirectories)
+include(WikiPlatformSpecificChecks)
 include(WikiPolicies)
 
 #-----------------------------------------------------------------------------
