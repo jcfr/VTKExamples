@@ -36,26 +36,16 @@ endif()
 vtk_module_export_info()
 vtk_module_config(VTK ${${vtk-module}_DEPENDS})
 
-set(CMAKE_MODULE_PATH ${WikiExamples_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH})
-
-# Testing
-option(BUILD_TESTING "Build the testing tree." OFF)
-set(WikiExamples_TEST_LABELS "foo")
-if (BUILD_TESTING)
-  ENABLE_TESTING()
-  INCLUDE(CTest)
-  CONFIGURE_FILE(
-    ${WikiExamples_SOURCE_DIR}/CMake/SampleBuildTest.cmake.in
-    ${WikiExamples_BINARY_DIR}/SampleBuildTest.cmake @ONLY)
-  message(STATUS "VTKWikiExamples: Tests will be built with label \"WikiExamples\"")
-else()
-  message(STATUS "VTKWikiExamples: Tests will not be built")
-endif ()
-
 #-----------------------------------------------------------------------------
+# Set project options
+set(CMAKE_MODULE_PATH
+  ${WikiExamples_SOURCE_DIR}/CMake
+  ${CMAKE_MODULE_PATH}
+  )
 include(WikiOutputDirectories)
 include(WikiPlatformSpecificChecks)
 include(WikiPolicies)
+include(WikiTesting)
 
 #-----------------------------------------------------------------------------
 # Mac specific
