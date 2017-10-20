@@ -36,6 +36,7 @@ set(DEPENDS
   vtkRenderingAnnotation
   vtkRenderingContext${VTK_RENDERING_BACKEND}
   vtkRenderingImage
+  vtkRenderingLabel
   vtkRenderingLOD
   vtkRenderingVolume${VTK_RENDERING_BACKEND}
   vtkTestingGenericBridge
