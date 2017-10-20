@@ -46,6 +46,7 @@ set(DEPENDS
 # Optional dependencies
 foreach(vtk-module IN ITEMS
   vtkInfovisBoostGraphAlgorithms
+  vtkInfovisViews
   vtkIOFFMPEG
   vtkIOMySQL
   vtkFiltersParallelStatistics

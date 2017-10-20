@@ -27,9 +27,26 @@ Requires_Setting_On (TreeMapView BUILD_TESTING)
 
 if(NOT VTK_USE_PARALLEL)
   set(SKIP PKMeansClustering)
-  message(STATUS "VTKWikiExamples: ${SKIP} requires VTK_PARALLEL and will not be built")
+  set(REQUIRE VTK_PARALLEL)
+  message(STATUS "VTKWikiExamples: ${SKIP} requires ${REQUIRE} and will not be built")
   string(REGEX REPLACE "[^;]*${SKIP}.cxx"
          "" ALL_FILES "${ALL_FILES}")
+endif()
+
+if(NOT TARGET vtkInfovisViews)
+  set(REQUIRE vtkInfovisViews)
+  foreach(SKIP
+      GraphPoints
+      MutableGraphHelper
+      ParallelCoordinatesView
+      SCurveSpline
+      TreeMapView
+      XGMLReader
+    )
+    message(STATUS "VTKWikiExamples: ${SKIP} requires ${REQUIRE} and will not be built")
+    string(REGEX REPLACE "[^;]*${SKIP}.cxx"
+           "" ALL_FILES "${ALL_FILES}")
+  endforeach()
 endif()
 
 foreach(SOURCE_FILE ${ALL_FILES})
