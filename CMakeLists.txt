@@ -11,16 +11,6 @@ else()
   message(STATUS "${_msg} - yes")
 endif()
 
-# Setup dependencies
-if(NOT VTK_BINARY_DIR)
-  find_package(VTK REQUIRED)
-endif()
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${VTK_CMAKE_DIR}")
-if(NOT VTK_BINARY_DIR)
-  include(vtkExternalModuleMacros)
-endif()
-message(STATUS "VTKWikiExamples: Found VTK VERSION: ${VTK_VERSION}(${VTK_RENDERING_BACKEND})")
-
 # Display build properties
 set(_msg "VTKWikiExamples: Setting executables prefix")
 message(STATUS "${_msg}")
@@ -32,65 +22,19 @@ else()
   message(STATUS "${_msg} - no")
 endif()
 
-# Load up the CMake variables we need.
-vtk_module_export_info()
-
-# List of optional VTK dependencies.
-set(WikiExamples_OPTIONAL_DEPENDS
-  vtkFiltersParallelStatistics
-  vtkInfovisBoostGraphAlgorithms
-  vtkInfovisViews
-  vtkIOFFMPEG
-  vtkIOMySQL
-  vtkGUISupportQtOpenGL
-  vtkRenderingQt
-  vtkViewsQt
-  )
-
-# Optional dependency are loaded only if enabled.
-foreach(optional-depends IN LISTS WikiExamples_OPTIONAL_DEPENDS)
-  #
-  # XXX When this module is built as a remote module within VTK, it
-  #     is not possible to dynamically update the DAG based on
-  #     availability of the optional VTK modules it should depend on.
-  #
-  #     To workaround this limitation, we perform the following tests:
-  #
-  #     (1) testing for the availability of the target:
-  #
-  #          - This always works for a stand-alone build because the targets
-  #             were imported in VTKConfig.
-  #
-  #          - but for a remote build where VTKConfig is only generated at
-  #            the end of the configuration, it will work only for the
-  #            optional dependencies that **happen to be enabled** before
-  #            this module.
-  #
-  #     (2) testing for Module_${optional-depends}: This is useful only
-  #         for the remote build and allow to detect the case where the user
-  #         explicitly enable a module.
-  #
-  #     Ideally, the module API should be extended to support an
-  #     OPTIONAL_DEPENDS property.
-  #
-  if(TARGET ${optional-depends} OR Module_${optional-depends})
-    list(APPEND ${vtk-module}_DEPENDS ${optional-depends})
-  endif()
-endforeach()
-
-# Load requested modules and their dependencies into variables:
-#  VTK_DEFINITIONS     = Preprocessor definitions
-#  VTK_LIBRARIES       = Libraries to link
-#  VTK_INCLUDE_DIRS    = Header file search path
-#  VTK_LIBRARY_DIRS    = Library search path (for outside dependencies)
-vtk_module_config(VTK ${${vtk-module}_DEPENDS})
+# Setup dependencies
+if(NOT VTK_BINARY_DIR)
+  find_package(VTK REQUIRED)
+endif()
+message(STATUS "VTKWikiExamples: Found VTK VERSION: ${VTK_VERSION}(${VTK_RENDERING_BACKEND})")
 
 #-----------------------------------------------------------------------------
-# Set project options
 set(CMAKE_MODULE_PATH
   ${WikiExamples_SOURCE_DIR}/CMake
   ${CMAKE_MODULE_PATH}
+  ${VTK_CMAKE_DIR}
   )
+include(WikiModuleConfig)
 include(WikiOutputDirectories)
 include(WikiPlatformSpecificChecks)
 include(WikiPolicies)
