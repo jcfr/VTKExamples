@@ -2,32 +2,45 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 project(WikiExamples)
 
-if (Module_WikiExamples)
-  message(STATUS "VTKWikiExamples: Building VTKWikiExamples as a Remote VTK Module")
-  message(STATUS "VTKWikiExamples: All executables will have a \"wiki\" prefix")
-  set(WIKI wiki)
-  vtk_module_impl()
-  if(NOT EXISTS "${VTK_BINARY_DIR}/VTKConfig.cmake")
-    return()
-  endif()
-  find_package(VTK PATHS ${VTK_BINARY_DIR})
-  include(${VTK_USE_FILE})
+# Display type of build
+set(_msg "VTKWikiExamples: Building VTKWikiExamples stand-alone")
+message(STATUS "${_msg}")
+if(VTK_BINARY_DIR)
+  message(STATUS "${_msg} - no")
 else()
-  message(STATUS "VTKWikiExamples: Building VTKWikiExamples stand-alone")
-# See if VTK is using OpenGL or OpenGL2
-  find_package(VTK CONFIG)
-  if (NOT VTK_RENDERING_BACKEND)
-    set(VTK_RENDERING_BACKEND OpenGL)
-  endif()
-  find_package(VTK REQUIRED)
-  include(${VTK_USE_FILE})
+  message(STATUS "${_msg} - yes")
 endif()
-set(WikiExamples_TEST_LABELS "foo")
-message(STATUS "VTKWikiExamples: VTK VERSION: ${VTK_VERSION}(${VTK_RENDERING_BACKEND})")
+
+# Setup dependencies
+if(NOT VTK_BINARY_DIR)
+  find_package(VTK REQUIRED)
+endif()
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${VTK_CMAKE_DIR}")
+if(NOT VTK_BINARY_DIR)
+  include(vtkExternalModuleMacros)
+endif()
+message(STATUS "VTKWikiExamples: Found VTK VERSION: ${VTK_VERSION}(${VTK_RENDERING_BACKEND})")
+
+# Display build properties
+set(_msg "VTKWikiExamples: Setting executables prefix")
+message(STATUS "${_msg}")
+if(VTK_BINARY_DIR)
+  set(WIKI "wiki")
+  message(STATUS "${_msg} - yes [prefix: ${WIKI}]")
+else()
+  set(WIKI "")
+  message(STATUS "${_msg} - no")
+endif()
+
+# Load up the CMake variables we need.
+vtk_module_export_info()
+vtk_module_config(VTK ${${vtk-module}_DEPENDS})
 
 set(CMAKE_MODULE_PATH ${WikiExamples_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH})
 
+# Testing
 option(BUILD_TESTING "Build the testing tree." OFF)
+set(WikiExamples_TEST_LABELS "foo")
 if (BUILD_TESTING)
   ENABLE_TESTING()
   INCLUDE(CTest)
@@ -41,8 +54,8 @@ endif ()
 
 include(PlatformSpecificChecks)
 
-include(WikiPolicies)
 # Set the CMake Policies
+include(WikiPolicies)
 WikiPolicies()
 
 #
