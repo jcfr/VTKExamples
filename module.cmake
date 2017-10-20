@@ -44,24 +44,6 @@ set(DEPENDS
   vtkViewsContext2D
   )
 
-# Optional dependencies
-foreach(vtk-module IN ITEMS
-  vtkInfovisBoostGraphAlgorithms
-  vtkInfovisViews
-  vtkIOFFMPEG
-  vtkIOMySQL
-  vtkFiltersParallelStatistics
-  vtkGUISupportQtOpenGL
-  vtkRenderingQt
-  vtkViewsQt
-  )
-  if(TARGET ${vtk-module})
-    list(APPEND
-      ${vtk-module}
-      )
-  endif()
-endforeach()
-
 vtk_module( WikiExamples
   DEPENDS
     ${DEPENDS}
