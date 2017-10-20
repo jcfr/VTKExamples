@@ -44,6 +44,14 @@ set(DEPENDS
   vtkViewsContext2D
   )
 
+if(Module_vtkGUISupportQtOpenGL AND ${VTK_VERSION} VERSION_LESS "8.1")
+  list(APPEND
+    vtkGUISupportQtOpenGL
+    vtkRenderingQt
+    vtkViewsQt
+    )
+endif()
+
 vtk_module( WikiExamples
   DEPENDS
     ${DEPENDS}

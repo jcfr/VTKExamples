@@ -9,6 +9,15 @@
 # other module.
 #
 
+if(${VTK_VERSION} VERSION_LESS "8.1")
+  return()
+endif()
+
+get_filename_component(WikiExample_MODULE_CONFIG ${CMAKE_CURRENT_LIST_FILE} NAME_WE)
+message(STATUS "VTKWikiExamples:")
+message(STATUS "VTKWikiExamples: Including VTK using: ${WikiExample_MODULE_CONFIG}")
+message(STATUS "VTKWikiExamples:")
+
 if(NOT VTK_BINARY_DIR)
   include(vtkExternalModuleMacros)
 endif()

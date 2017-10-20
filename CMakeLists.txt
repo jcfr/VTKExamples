@@ -35,6 +35,7 @@ set(CMAKE_MODULE_PATH
   ${VTK_CMAKE_DIR}
   )
 include(WikiModuleConfig)
+include(WikiModuleConfigLegacy)
 include(WikiOutputDirectories)
 include(WikiPlatformSpecificChecks)
 include(WikiPolicies)
