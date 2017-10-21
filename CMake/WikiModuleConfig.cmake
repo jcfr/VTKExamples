@@ -52,6 +52,14 @@ endforeach()
 #  VTK_LIBRARY_DIRS    = Library search path (for outside dependencies)
 vtk_module_config(VTK ${${vtk-module}_DEPENDS})
 
+# Since this project does not use the regular VTK module API
+# to build the test executables (i.e. vtk_module_test_executable), the
+# required compile definitions (i.e. <module>_AUTOINIT macros needed for
+# object factory overrides initialization) are not automatically used.
+#
+# To address this, the compile definitions are explicitly associated with the
+# top-level project directory.
+set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS ${VTK_DEFINITIONS})
 
 #
 #
